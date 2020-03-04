@@ -8,21 +8,22 @@ import com.github.princesslana.smalld.SmallD;
 
 public class StarMeUp implements Consumer<SmallD> {
 
-  private final Config config;
-
-  private StarMeUp(Config config) {
-    this.config = config;
-  }
-
   public void accept(SmallD smalld) {
     smalld.onGatewayPayload(p -> {
       JsonObject json = Json.parse(p).asObject();
 
       ifMessageReactionAdd(json, ra -> {
         if (ra.isStar()) {
-          smalld.post(
-            "/channels/" + config.getChannelPostId() + "/messages",
-            Json.object().add("content", "star").toString());
+          Message m = Message.get(smalld, ra.getChannelId(), ra.getMessageId());
+
+          if (!m.isStarred()) {
+            String content = m.getUser() + " said:\n> " + m.getContent();
+            smalld.post(
+              "/channels/" + Config.getChannelPostId() + "/messages",
+              Json.object().add("content", content).toString());
+
+            m.star();
+          }
         }
       });
     });
@@ -35,8 +36,6 @@ public class StarMeUp implements Consumer<SmallD> {
   }
 
   public static void main(String[] args) {
-    Config config = new Config();
-
-    SmallD.run(config.getToken(), new StarMeUp(config));
+    SmallD.run(Config.getToken(), new StarMeUp());
   }
 }

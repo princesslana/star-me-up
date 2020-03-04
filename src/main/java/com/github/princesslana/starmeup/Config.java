@@ -4,18 +4,23 @@ import java.util.Optional;
 
 public class Config {
 
-  public String getToken() {
+  private Config() { }
+
+  public static String getToken() {
     return getString("SMU_TOKEN");
   }
 
-  public String getChannelPostId() {
+  public static String getChannelPostId() {
     return getString("SMU_CHANNEL_ID");
   }
 
-  private String getString(String key) {
+  public static String getStar() {
+    return "\u2b50";
+
+  }
+
+  private static String getString(String key) {
     return Optional.ofNullable(System.getenv(key))
       .orElseThrow(() -> new IllegalStateException("No config for " + key));
   }
-
 }
-

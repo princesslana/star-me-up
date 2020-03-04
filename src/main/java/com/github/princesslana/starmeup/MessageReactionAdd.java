@@ -10,8 +10,16 @@ public class MessageReactionAdd {
     this.d = d;
   }
 
+  public String getChannelId() {
+    return d.getString("channel_id", "");
+  }
+
+  public String getMessageId() {
+    return d.getString("message_id", "");
+  }
+
   public boolean isStar() {
-    return d.get("emoji").asObject().getString("name", "").equals("\u2B50");
+    return d.get("emoji").asObject().getString("name", "").equals(Config.getStar());
   }
 
 }
