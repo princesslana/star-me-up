@@ -17,7 +17,7 @@ public class StarMeUp implements Consumer<SmallD> {
           Message m = Message.get(smalld, ra.getChannelId(), ra.getMessageId());
 
           if (!m.isStarred()) {
-            String content = m.getUser() + " said:\n> " + m.getContent();
+            String content = "**" + m.getUser() + "** said:\n> " + m.getContent() + "\n_ _";
             smalld.post(
               "/channels/" + Config.getChannelPostId() + "/messages",
               Json.object().add("content", content).toString());
